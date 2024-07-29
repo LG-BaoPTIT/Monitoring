@@ -1,0 +1,44 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+           - 172.31.99.5:9093
+
+rule_files:
+   - "/etc/prometheus/rules.yml"
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["172.31.99.5:9090"]
+
+  - job_name: "node"
+    static_configs:
+      - targets: ["172.31.99.5:9100"]
+
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: [ "172.31.99.5:8080" ]  # Địa chỉ của cadvisor
+
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Module kiểm tra HTTP
+    static_configs:
+      - targets:
+        - http://172.31.99.5:8000/dev-ops/sayHello # Địa chỉ của service 1
+        - https://sbv.vuipay.vn
+        - https://stg-ma.opay.vn
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 172.31.99.5:9115  #
+      
+  

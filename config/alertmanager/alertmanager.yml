@@ -1,0 +1,20 @@
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
+
+route:
+  receiver: 'telegram'
+  group_wait: 15s
+  group_interval: 5m
+  repeat_interval: 1h
+
+receivers:
+  - name: 'telegram'
+    telegram_configs:
+      - bot_token: '7392441738:AAGt6a0qiPrx1uWGvyweZgwjf_5rWYVV9Kc'
+        api_url: https://api.telegram.org
+        chat_id: 6467671781
+        message: '{{ template "telegram.yucca.message" . }}'

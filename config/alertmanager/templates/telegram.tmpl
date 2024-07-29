@@ -1,0 +1,9 @@
+{{ define "telegram.yucca.message" }}
+*Alert:* {{ .Labels.alertname }}
+*Instance:* {{ .Labels.instance }}
+*Severity:* {{ .Labels.severity }}
+*Description:* {{ .Annotations.description }}
+*Summary:* {{ .Annotations.summary }}
+*Time:* {{ .StartsAt }}
+{{ end }}
+
